@@ -1338,7 +1338,7 @@ pre[class*="language-"] {
 #<span class="token number">11</span> <span class="token punctuation">}</span></code></pre>
 <p>The borrow checker will complain at line 10 that <code>a</code>, <code>b</code> don't live long enough. This is obvious since <code>a</code>,<code>b</code> are in a inner scope, which ends at line 8. However, references to <code>a</code> and <code>b</code> are still inside <code>queue</code> till line 10. This will cause invalid read to deallocated stack space, which the borrow check will prevent during compile time.</p>
 <p>Therefore, an important insight into <code>Vecdeque</code> holding references is that <em>the lifetime of <code>VecDeque</code> is bounded by the shortest lifetime among all references it stores</em>. This can be explained by lifetime <a href="https://doc.rust-lang.org/book/ch10-03-lifetime-syntax.html#lifetime-elision">elision rule</a> on method definition.</p>
-<p><img alt="" src="file:///Users/alaric66/Library/Application%20Support/marktext/images/2023-06-04-12-46-13-image.png"></p>
+<p><img alt="" src="2023-06-04-12-46-13-image.png"></p>
 <p>Since <code>a</code> and <code>b</code> only live from ln4/ln5 to ln8, lifetime of <code>queue</code> is at most till ln8. So if we remove the stuff after ln9, the borrow check will let us pass.</p>
 <h3 class="atx" id="process-db-requests">Process DB requests</h3>
 <p>We're so close to our goal! Let's design how our database handles user request. It's usual that there will be multiple threads inside a DB that serve requests concurrently and each thread grab some resources from a pool. We simplify each thread into a function that takes a queue of <code>Request</code> and the number of resources it possess <code>max_process_unit</code>, meaning the maximum number of CRUD operations it can perform:</p>
@@ -1422,7 +1422,7 @@ pre[class*="language-"] {
 #<span class="token number">22</span>    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"there are #{} free resource left."</span><span class="token punctuation">,</span> available_resource<span class="token punctuation">)</span><span class="token punctuation">;</span>
 #<span class="token number">23</span> <span class="token punctuation">}</span></code></pre>
 <p>Let's first calculate the lifetime of each <em>variable</em>, since <code>Request</code> contains lifetime parameter itself.</p>
-<p><img alt="" src="file:///Users/alaric66/Library/Application%20Support/marktext/images/2023-06-04-15-26-03-image.png"></p>
+<p><img alt="" src="2023-06-04-15-26-03-image.png"></p>
 <p>By previous section, it's easy to verify lifetime via function signature of <code>Request::new()</code> function. Therefore, we obtain the following table of variable lifetime:</p>
 <p><em>lifetime table, can integrate into visualization, now just for reasoning</em></p>
 <table>
@@ -1475,7 +1475,7 @@ pre[class*="language-"] {
 <ul>
 <li><code>queue: &amp;'i1 mut VecDeque&lt;&amp;'i1 mut Request&lt;'i1&gt;&gt;</code></li>
 </ul>
-<p><img alt="" src="file:///Users/alaric66/Library/Application%20Support/marktext/images/2023-06-04-17-01-18-image.png"></p>
+<p><img alt="" src="2023-06-04-17-01-18-image.png"></p>
 <p>From the graph, we see the reference <code>request_queue</code> stores are still alive till #20. That's because the <a href="https://stackoverflow.com/questions/50251487/what-are-non-lexical-lifetimes">NLL lifetime</a> defines a reference is alive until it will not be used anymore. In this case, <code>req</code> (Note that <code>req</code> is of type <code>&amp;mut Request</code>), which is defined by <code>if let Some(req) = request_halfway</code> can be any one of these references (i.e, <code>&amp;read_request</code>, <code>&amp;update_request</code>, <code>&amp;delete_request</code>) if the <code>if let</code> statement is true. The borrow checker will be a protective to all control flow possibilities, so that the last use of any reference to R/U/D will be line 20. </p>
 <p>Therefore,<code>'i1 = [#18, #20]</code>.</p>
 <ul>
@@ -1485,7 +1485,7 @@ pre[class*="language-"] {
 <ul>
 <li><code>-&gt; Option&lt;&amp;'i mut Request&lt;'i3&gt;&gt;</code></li>
 </ul>
-<p><img alt="" src="file:///Users/alaric66/Library/Application%20Support/marktext/images/2023-06-04-16-49-03-image.png"></p>
+<p><img alt="" src="2023-06-04-16-49-03-image.png"></p>
 <p>This case is already contained in <code>'i1</code>. If the <code>if let</code> statement is true, data stored inside <code>request_halfway</code> will be moved into <code>req</code>, which results in the end of lifetime of <code>request_halfway</code>.So <code>'i3 = [#18, #19]</code></p>
 <p>Combining <code>'i1</code>,<code>'i2</code> and <code>'i3</code>, we finally calculated <code>'i</code>, which shall encompass all three sub-lifetimes and be as small as possible. Hence, <code>'i1</code> = [#18, #20]. Eventually, all references' lifetimes are made sure to pass the borrow checker, Hooray!</p>
 <h3 class="atx" id=""></h3>
