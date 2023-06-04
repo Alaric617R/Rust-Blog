@@ -1475,7 +1475,7 @@ pre[class*="language-"] {
 <ul>
 <li><code>queue: &amp;'i1 mut VecDeque&lt;&amp;'i1 mut Request&lt;'i1&gt;&gt;</code></li>
 </ul>
-<p><img alt="" src="2023-06-04-17-01-18-image.png"></p>
+<p><img alt="" src="../2023-06-04-17-01-18-image.png"></p>
 <p>From the graph, we see the reference <code>request_queue</code> stores are still alive till #20. That's because the <a href="https://stackoverflow.com/questions/50251487/what-are-non-lexical-lifetimes">NLL lifetime</a> defines a reference is alive until it will not be used anymore. In this case, <code>req</code> (Note that <code>req</code> is of type <code>&amp;mut Request</code>), which is defined by <code>if let Some(req) = request_halfway</code> can be any one of these references (i.e, <code>&amp;read_request</code>, <code>&amp;update_request</code>, <code>&amp;delete_request</code>) if the <code>if let</code> statement is true. The borrow checker will be a protective to all control flow possibilities, so that the last use of any reference to R/U/D will be line 20. </p>
 <p>Therefore,<code>'i1 = [#18, #20]</code>.</p>
 <ul>
