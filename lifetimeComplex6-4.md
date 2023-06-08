@@ -1,8 +1,14 @@
-# Visualization of Rust Lifetime
+# Visualization of Rust Lifetime Parameter
 
-## Lifetime - An Overview
+## Lifetime Parameter - An Overview
 
-It's Rust borrow checker's good intention to eradicate undefined and unsafe behavior at compile time. One good object to look at is the usage of references, since unsafe access to memory will occur if a reference lives longer than the original lender of the resource. However, borrow checker has loosen the constraint on programmers, with the introduction of NLL lifetime (check this [RFC](https://rust-lang.github.io/rfcs/2094-nll.html)). However, we will not focus on NLL lifetime, but how to visualize lifetime and lifetime parameter, with the latter tends to be a common headache for most rust rookies。
+Lifetime parameter is a specialty in rust language. It's mainly used by the borrow checker so as to make sure usage of reference is safe, which simply obeys one rule: a reference cannot outlive the original variable it's pointing to. Lifetime parameter typically annotates the lifetime relation between:
+
++ References passed to a function call and possibly the return value as well.
+
++ References inside a struct and the struct variable upon creation.
+
+The borrow checker will keep a table of lifetime for all variables, either by looking at the scope (line number) or via the aid of lifetime parameter. If a reference is accessed outside its scope (lifetime looked up by the borrow checker), then an error will be issued ([see how borrow checker reports reference error](https://alaric617r.github.io/Rust-Blog/Intro%20to%20Polonius.html)).
 
 ## Lifetime Parameter in Normal Functions
 
