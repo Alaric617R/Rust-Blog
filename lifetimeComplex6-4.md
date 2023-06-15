@@ -103,6 +103,18 @@ Since `&name` is a temporary variable created just to be passed on line 4, its l
 
 Note that this program runs well because every usage of a reference is within its legal lifetime scope. For example, changing `name` on line 7 won't cause a `value still borrowed` error since `rust_book.name`, which is a reference to `name`, has been out of scope since line 6 based on the lifetime we calculated.
 
+##### About reference passed on the fly
+
+You may question why `&name` is only live on line 4. We could imagine  the borrow checker will create a reference to `name` and pass that reference to the function, and everything is happening on a single line:
+
+```rust
+#4 let tmp = &name;
+#4 let rust_book = Book::new(tmp, serial_num);
+#4 // tmp's lifetime is end here
+```
+
+As [NLL lifetime](https://stackoverflow.com/questions/50251487/what-are-non-lexical-lifetimes) defines a reference's lifetime ends after its last usage, `tmp` is created on line 4 and also ended on the same line. We will treat lifetime of references created on the fly in this way in the following tutorial.
+
 ## Lifetime Parameter - A More Complex Example
 
 Previous examples have equipped you with the basic methodology for reasoning out generic lifetime parameters, just as the borrow check does. In this section, we will use lifetime parameters to construct a real-life problem-solver: a scheduler program that processes requests in a database. Let's dive in.
