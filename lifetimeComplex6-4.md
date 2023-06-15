@@ -2,17 +2,17 @@
 
 ## Lifetime Parameter - An Overview
 
-Lifetime parameter is a specialty in rust language. It's mainly used by the borrow checker so as to make sure usage of reference is safe, which simply obeys one rule: a reference cannot outlive the original variable it's pointing to. Lifetime parameter typically annotates the lifetime relation between:
+Lifetime parameters are a specialty of the Rust language. They're mainly used by the borrow checker to make sure usage of references is safe, meaning they simply follow one rule: a reference cannot outlive the original variable it's pointing to. Lifetime parameters typically annotate the lifetime relation between:
 
-+ References passed to a function call and possibly the return value as well.
++ References passed to a function call, and possibly the return value as well.
 
 + References inside a struct and the struct variable upon creation.
 
-The borrow checker will keep a table of lifetime for all variables, either by looking at the scope (line number) or via the aid of lifetime parameter. If a reference is accessed outside its scope (lifetime looked up by the borrow checker), then an error will be issued ([see how borrow checker reports reference error](https://alaric617r.github.io/Rust-Blog/Intro%20to%20Polonius.html)).
+The borrow checker will keep a table of lifetimes for all variables, either by looking at the scope (line number) or via the aid of lifetime parameters. If a reference is accessed outside its scope (the lifetime looked up by the borrow checker), then an error will be issued ([see how the borrow checker reports reference errors](https://alaric617r.github.io/Rust-Blog/Intro%20to%20Polonius.html)).
 
 ## Lifetime Parameter in Normal Functions
 
-Let's look a simple function that takes two reference to `i32` and return the reference to the bigger one:
+Let's look a simple function that takes two references to `i32` and returns the reference to the bigger one:
 
 ```rust
 fn max<'a>(x: &'a i32, y: &'a i32) -> &'a i32{
@@ -41,21 +41,21 @@ fn main(){
 #10 }
 ```
 
-To reason how borrow checker calculates `'a` of `max`, let's first draw out the lifetime of each variable in caller's point of view: 
+To reason how borrow checker calculates `'a` of `max`, let's first draw out the lifetime of each variable in the caller's point of view: 
 
 ![](/Users/alaric66/Desktop/research/RustViz/Rust-blogs/max_var_lifetime.jpeg)
 
-Then, lifetime parameter could be easily computed just looking at the function signature of `max`:
+Then, the lifetime parameter can be easily computed just by looking at the function signature of `max`:
 
 ![](/Users/alaric66/Desktop/research/RustViz/Rust-blogs/max_lp.jpeg)
 
-`'a` should be able to encompass the lifetime of all three reference and be as small as possible, which in this case, `'a = [#3, #9]`, the same as lifetime of `r`. Otherwise, borrow checker will turn down even correct usage of some reference, since the lifetime assigned to that reference ends earlier than it should be. Say the borrow checker assign `'a = [#3, #8]`, then it will turn down `println!("r is {}",r);` on line 9, since `r` should be dead on line 8. But it's obvious that the borrow checker is being over-protective, since accessing the path of `r` is total safe, since `r` is pointing to one of `a` and `b` and both of these variables are life on line 9.
+`'a` should be able to encompass the lifetime of all three references and be as small as possible. In this case, `'a = [#3, #9]`, the same as the lifetime of `r`. Otherwise, the borrow checker will turn down even the correct usage of some references, since the lifetime assigned to that reference ends earlier than it should. Say the borrow checker assigns `'a = [#3, #8]`, then it will turn down `println!("r is {}",r);` on line 9, since `r` should be dead on line 8. But it's obvious that the borrow checker is being over-protective, since accessing the path of `r` is totally safe, as `r` is pointing to one of `a` and `b` and both of these variables still have life on line 9.
 
 ## Lifetime Parameter in Structs
 
-A struct must have explicit lifetime parameter as annotation if it contains a reference. The reason is simple, since the reference can't outlive the lender variable, the struct also cannot. Lifetime parameter is the way to correlate the lifetime of the reference and the struct.
+A struct must have explicit lifetime parameter annotations if it contains a reference. The reason is simple: since the reference can't outlive the lender variable, the struct also cannot. Lifetime parameters are the way to correlate the lifetime of the reference and the struct.
 
-Let's see how lifetime parameter is computed when used to annotate a struct:
+Let's see how the lifetime parameter is computed when used to annotate a struct:
 
 ```rust
 struct Book<'a>{
@@ -72,7 +72,7 @@ impl<'a> Book<'a>{
 
 Here we define a `Book` struct that contains an immutable reference to a `String`. `'a` means that if the lifetime of `Book` is `'a`, then the lifetime of `name : &'a String` will be at least `'a`.
 
-The `impl` block contains one function that create `Book` type in a factory mode. Let's see an example of calling this function:
+The `impl` block contains one function that create `Book` type in a factory mode. Let's look at an example of calling this function:
 
 ```rust
 fn main(){
@@ -87,7 +87,7 @@ fn main(){
 #9 }
 ```
 
-First and foremost, let's calculate the lifetime of each variable (this will always be the first step, so bear in mind). It suffices just look at line numbers and scoping curly brackets:
+First and foremost, let's calculate the lifetime of each variable (this will always be the first step, so bear in mind). It suffices to just look at line numbers and scoping curly brackets:
 
 | Variable     | Lifetime |
 |:------------:|:--------:|
@@ -99,19 +99,17 @@ Note that since `rust_book` is in an inner scope, it will be destructed when the
 
 ![](/Users/alaric66/Desktop/research/RustViz/Rust-blogs/book_life_viz.png)
 
-Since `&name` is a temporary variable just passed on line 4, its lifetime will just be limited in line 4. As `'a` should encompass reference lifetime both in `rust_book.name` as well as `&name`,`'a` = [#4, #6]. This calculation also get passed to `struct Book<'a>`, so the lifetime parameter of `rust_book.name` will be [#4,#6].
+Since `&name` is a temporary variable created just to be passed on line 4, its lifetime will be limited only to line 4. As `'a` should encompass the lifetime of references both in `rust_book.name`, as well as `&name`, `'a` = [#4, #6]. This calculation is passed to `struct Book<'a>`, so the lifetime parameter of `rust_book.name` will be [#4,#6].
 
-Note that this program runs well because every usage of reference is in its legal lifetime scope. For example, changing `name` on line 7 won't cause a `value still borrowed` error since `rust_book.name`, which is a reference to `name`, has been out of scope on line 6 based on the lifetime we calculated.
+Note that this program runs well because every usage of a reference is within its legal lifetime scope. For example, changing `name` on line 7 won't cause a `value still borrowed` error since `rust_book.name`, which is a reference to `name`, has been out of scope since line 6 based on the lifetime we calculated.
 
 ## Lifetime Parameter - A More Complex Example
 
-Previous examples have equipped you with the basic methodology into reasoning generic lifetime parameter, just as the borrow check does. In this section, we will use lifetime parameter to construct a real-life problem-solver: a scheduler program that process requests in a database. Let's dive in.
+Previous examples have equipped you with the basic methodology for reasoning out generic lifetime parameters, just as the borrow check does. In this section, we will use lifetime parameters to construct a real-life problem-solver: a scheduler program that processes requests in a database. Let's dive in.
 
 ### Modeling Requests Using Structs
 
-First, we need to prototype incoming request for our database. For simplicity, the DB system only supports four kinds of operation:
-
-`Create`, `Read`,`Update`,`Delete`, namely [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete). Each kind of request will be issued in batches by different users. To model that, we can do it via defining an `enum` of all CRUD request:
+First, we need to prototype incoming requests for our database. For simplicity, the DB system only supports four kinds of operations: `Create`, `Read`, `Update`, and `Delete`, or [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete). Each kind of request will be issued in batches by different users. To model that, we can define an `enum` of all CRUD request types:
 
 ```rust
 enum RequestType{
@@ -152,11 +150,11 @@ impl<'a> Request<'a>{
 }
 ```
 
-Note that since `struct Request` contains a reference, we must make sure `Request` instance doesn't outlive the lender of `num_request_left`, meaning an explicit lifetime parameter is needed. For convenience, we also define a `Request::new()` function to create `Request` in factory mode. The rational behind the lifetime annotation has been already explained in previous section.
+Note that since `struct Request` contains a reference, we must make sure `Request` instance doesn't outlive the lender of `num_request_left`, meaning an explicit lifetime parameter is needed. For convenience, we also define a `Request::new()` function to create `Request` in factory mode. The rational behind the lifetime annotation has already been explained in the previous section.
 
 #### Data Structure for Our Request Queue: `VecDeque`
 
-`std::collections::VecDeque` is just like `std::dequeu<T>` in C++, which can either be FIFO or FILO order. We will choose FIFO to process the incoming request. Let's first get familiar with this data structure by two examples:
+`std::collections::VecDeque` is just like `std::deque<T>` in C++, which can either be FIFO or FILO order. We will choose FIFO to process the incoming requests. Let's first get familiar with this data structure with two examples:
 
 + Correct usage:
 
@@ -180,7 +178,7 @@ use std::collections::VecDeque;
 #15 }
 ```
 
-Here, we create a `VecDeque` to store `&i32`, because later we're going to store reference to `Request` so it's beneficial to find some insights of using reference as data beforehand. On line 5-6, we push reference of `a` and `b` to the queue. Then, we loop through the queue in FIFO order by calling `pop_front()`. Note that difference from C++, the return type of `pop_front()` if not `&i32` but `Option<&i32>`:
+Here, we create a `VecDeque` to store `&i32`, because later we're going to store a reference to `Request`, so it's beneficial to find some insights on using references as stored data beforehand. On lines 5-6, we push references of `a` and `b` into the queue. Then, we loop through the queue in FIFO order by calling `pop_front()`. Note that unlike C++, the return type of `pop_front()` is not `&i32` but `Option<&i32>`:
 
 > `alloc::collections::vec_deque::VecDeque`
 > 
@@ -190,7 +188,7 @@ Here, we create a `VecDeque` to store `&i32`, because later we're going to store
 > 
 > Removes the first element and returns it, or `None` if the deque is empty.
 
-This provides safety each if the user calls `pop_front()` when `VecDeque` is empty. To inspect whether `queue` is empty or not, we use `if let` syntax to extract the value stored in the front of queue  and break if we see a `Option::None`.
+This provides a safety net if the user calls `pop_front()` when `VecDeque` is empty. To inspect whether `queue` is empty or not, we use `if let` syntax to extract the value stored in the front of queue,  and break if we see a `Option::None`.
 
 + Erroneous Usage:
 
@@ -212,17 +210,17 @@ This provides safety each if the user calls `pop_front()` when `VecDeque` is emp
 #11 }
 ```
 
-The borrow checker will complain at line 10 that `a`, `b` don't live long enough. This is obvious since `a`,`b` are in a inner scope, which ends at line 8. However, references to `a` and `b` are still inside `queue` till line 10. This will cause invalid read to deallocated stack space, which the borrow check will prevent during compile time.
+The borrow checker will complain at line 10 that `a` and `b` don't live long enough. This is obvious, since `a` and `b` are in the inner scope which ends at line 8. However, references to `a` and `b` are still inside `queue` till line 10. This will cause an invalid read to deallocated stack space, which the borrow check will prevent during compile time.
 
-Therefore, an important insight into `Vecdeque` holding references is that *the lifetime of `VecDeque` is bounded by the shortest lifetime among all references it stores*. This can be explained by lifetime [elision rule](https://doc.rust-lang.org/book/ch10-03-lifetime-syntax.html#lifetime-elision) on method definition.
+Therefore, an important insight into a `Vecdeque` holding references is that *the lifetime of `VecDeque` is bounded by the shortest lifetime among all references it stores*. This can be explained by the  [lifetime elision rule](https://doc.rust-lang.org/book/ch10-03-lifetime-syntax.html#lifetime-elision) on method definition.
 
 ![](/Users/alaric66/Desktop/research/RustViz/Rust-blogs/2023-06-04-12-46-13-image.png)
 
-Since `a` and `b` only live from ln4/ln5 to ln8, lifetime of `queue` is at most till ln8. So if we remove the stuff after ln9, the borrow check will let us pass.
+Since `a` and `b` only live from lines 4/5 to line 8, the lifetime of `queue` lasts at most until line 8. So if we remove the stuff after line 9, the borrow check will let us pass.
 
 ### Process DB Requests
 
-We're so close to our goal! Let's design how our database handles user request. It's usual that there will be multiple threads inside a DB that serve requests concurrently and each thread grab some resources from a pool. We simplify each thread into a function that takes a queue of `Request` and the number of resources it possess `max_process_unit`, meaning the maximum number of CRUD operations it can perform:
+We're so close to our goal! Let's design how our database handles user requests. It's typical that there will be multiple threads inside a database that serve requests concurrently, and each thread grabs some resources from a pool. We simplify each thread into a function that takes a queue of `Request`, and the number of resources it possesses, `max_process_unit`, meaning the maximum number of CRUD operations it can perform:
 
 ```rust
 /// process requests passed from a mutable deque, return the front request if it hasn't been fully served
@@ -265,21 +263,21 @@ fn process_requests<'i>(queue: &'i mut VecDeque<&'i mut Request<'i>>, max_proces
 }
 ```
 
-We won't haste to explain how lifetime parameter works here, instead we will embed it with some caller. For now, just understand what it wants to accomplish:
+We won't hasten to explain how lifetime parameter works here; instead, we will embed it in some caller. For now, just understand what it wants to accomplish:
 
-1. First, loop through batched requests in FIFO order;
+1. First, loop through a batch of requests in FIFO order;
 
-2. When queue not empty, serve the front request as much as we can. 
+2. When `queue` is not empty, serve the front request as much as we can. 
    
    + If `max_process_unit` is enough to cover this request, just decrements `max_process_unit` by `request.num_request_left` and keeps processing;
    
-   + If `max_process_unit` is not enough to complete the whole request, we will return the request reference and hopes some handler will process it, or just put it back to the queue, which is out of our concern.
+   + If `max_process_unit` is not enough to complete the whole request, we will return the request reference and hope some other handler will process it, or just put it back to the queue, which is out of our concern.
 
-3. If queue is empty, it means all requests have been served and we return blissfully. 
+3. If `queue` is empty, it means all requests have been served and we return blissfully. 
 
-### Inside the DB Finally
+### Finally Inside the Database
 
-Eventually, we're able to put together all the pieces and design our DB. For simplicity, we model this as single-threaded:
+Eventually, we're able to put together all the pieces and design our DB. For simplicity, we will model this as single-threaded:
 
 ```rust
 fn main() {
@@ -328,32 +326,32 @@ By previous section, it's easy to verify lifetime via function signature of `Req
 | `mut available_resource: u32`               | [#17, #23]       |
 | `request_halfway : Option<mut Request>`     | [#18, #23]       |
 
-We called `process_requests()` on ln18, lets have closer look how lifetime parameter is calculated in this case by inspecting the function signature:
+We called `process_requests()` on line 18 --- let's have a closer look how the lifetime parameter is calculated in this case by inspecting the function signature:
 
 ```rust
 fn process_requests<'i>(queue: &'i mut VecDeque<&'i mut Request<'i>>, max_process_unit: &'i mut u32) -> Option<&'i mut Request<'i>>{
 ```
 
-It's a bit terrifying as there are a lot of type specifying and lifetime annotations, so we'll break down by parts:
+It's a bit terrifying as there are a lot of type specifying and lifetime annotations, so we'll break down into parts:
 
 + `queue: &'i1 mut VecDeque<&'i1 mut Request<'i1>>`
 
 ![](/Users/alaric66/Desktop/research/RustViz/Rust-blogs/2023-06-04-17-01-18-image.png)
 
-From the graph, we see the reference `request_queue` stores are still alive till #20. That's because the [NLL lifetime](https://stackoverflow.com/questions/50251487/what-are-non-lexical-lifetimes) defines a reference is alive until it will not be used anymore. In this case, `req` (Note that `req` is of type `&mut Request`), which is defined by `if let Some(req) = request_halfway` can be any one of these references (i.e, `&read_request`, `&update_request`, `&delete_request`) if the `if let` statement is true. The borrow checker will be a protective to all control flow possibilities, so that the last use of any reference to R/U/D will be line 20. 
+From the graph, we see the references `request_queue` stores are still alive till line 20. That's because the [NLL lifetime](https://stackoverflow.com/questions/50251487/what-are-non-lexical-lifetimes) defines a reference as alive until it will not be used anymore. In this case, `req` (Note that `req` is of type `&mut Request`), which is defined by `if let Some(req) = request_halfway` can be any one of these references (i.e, `&read_request`, `&update_request`, `&delete_request`) if the `if let` statement is true. The borrow checker will be a protective to all control flow possibilities, so the last use of any reference to R/U/D will be line 20. 
 
-Therefore,`'i1 = [#18, #20]`.
+Therefore, `'i1 = [#18, #20]`.
 
 + `max_process_unit: &'i2 mut u32` 
 
-This is easy, since `&available_resource` is passed at line 18 and since it's a temporary reference, it ends on line 18 as well. So `'i2 = [#18, #18]`.
+This is easy, since `&available_resource` is passed at line 18, and since it's a temporary reference, it ends on line 18 as well. So `'i2 = [#18, #18]`.
 
 + `-> Option<&'i mut Request<'i3>>`
 
 ![](/Users/alaric66/Desktop/research/RustViz/Rust-blogs/2023-06-04-16-49-03-image.png)
 
-This case is already contained in `'i1`. If the `if let` statement is true, data stored inside `request_halfway` will be moved into `req`, which results in the end of lifetime of `request_halfway`.So `'i3 = [#18, #19]`
+This case is already contained within `'i1`. If the `if let` statement is true, data stored inside `request_halfway` will be moved into `req`, which results in the end of lifetime of `request_halfway`. So `'i3 = [#18, #19]`
 
-Combining `'i1`,`'i2` and `'i3`, we finally calculated `'i`, which shall encompass all three sub-lifetimes and be as small as possible. Hence, `'i1` = [#18, #20]. Eventually, all references' lifetimes are made sure to pass the borrow checker, Hooray!
+Combining `'i1`, `'i2` and `'i3`, we have finally calculated `'i`, which encompasses all three sub-lifetimes to be as small as possible. Hence, `'i1` = [#18, #20]. Eventually, all references' lifetimes are made sure to pass the borrow checker. Hooray!
 
 ### 
