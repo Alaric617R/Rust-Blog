@@ -344,26 +344,26 @@ We called `process_requests()` on line 18 --- let's have a closer look how the l
 fn process_requests<'i>(queue: &'i mut VecDeque<&'i mut Request<'i>>, max_process_unit: &'i mut u32) -> Option<&'i mut Request<'i>>{
 ```
 
-It's a bit terrifying as there are a lot of type specifying and lifetime annotations, so we'll break down into parts:
+This function signature is a bit terrifying, with references and `'i`s all over the place. To make it a bit easier, we'll break it down into three distinct parts, which we'll call `'i1`, `'i2`, and `'i3`. Each is a different reference within the total lifetime that makes up `'i`. 
 
-+ `queue: &'i1 mut VecDeque<&'i1 mut Request<'i1>>`
++ `'i1`: `queue: &'i1 mut VecDeque<&'i1 mut Request<'i1>>`
 
 ![](/Users/alaric66/Desktop/research/RustViz/Rust-blogs/2023-06-04-17-01-18-image.png)
 
-From the graph, we see the references `request_queue` stores are still alive till line 20. That's because the [NLL lifetime](https://stackoverflow.com/questions/50251487/what-are-non-lexical-lifetimes) defines a reference as alive until it will not be used anymore. In this case, `req` (Note that `req` is of type `&mut Request`), which is defined by `if let Some(req) = request_halfway` can be any one of these references (i.e, `&read_request`, `&update_request`, `&delete_request`) if the `if let` statement is true. The borrow checker will be a protective to all control flow possibilities, so the last use of any reference to R/U/D will be line 20. 
+From the graph, we see the references `request_queue` stores are still alive till line 20. That's because the [NLL (Non-lexical lifetime)](https://stackoverflow.com/questions/50251487/what-are-non-lexical-lifetimes) defines a reference as alive until it will not be used anymore. In this case, `req` (Note that `req` is of type `&mut Request`), which is defined by `if let Some(req) = request_halfway` can be any one of these references (i.e, `&read_request`, `&update_request`, `&delete_request`) if the `if let` statement is true. The borrow checker will be a protective to all control flow possibilities, so the last use of any reference to R/U/D will be line 20. 
 
 Therefore, `'i1 = [#18, #20]`.
 
-+ `max_process_unit: &'i2 mut u32` 
++ `'i2`: `max_process_unit: &'i2 mut u32` 
 
 This is easy, since `&available_resource` is passed at line 18, and since it's a temporary reference, it ends on line 18 as well. So `'i2 = [#18, #18]`.
 
-+ `-> Option<&'i mut Request<'i3>>`
++ `'i3`: `-> Option<&'i mut Request<'i3>>`
 
 ![](/Users/alaric66/Desktop/research/RustViz/Rust-blogs/2023-06-04-16-49-03-image.png)
 
 This case is already contained within `'i1`. If the `if let` statement is true, data stored inside `request_halfway` will be moved into `req`, which results in the end of lifetime of `request_halfway`. So `'i3 = [#18, #19]`
 
-Combining `'i1`, `'i2` and `'i3`, we have finally calculated `'i`, which encompasses all three sub-lifetimes to be as small as possible. Hence, `'i1` = [#18, #20]. Eventually, all references' lifetimes are made sure to pass the borrow checker. Hooray!
+Combining `'i1`, `'i2` and `'i3`, we have finally calculated `'i`, which encompasses all three sub-lifetimes to be as small as possible. Think of it this way: the compiler wants to know, of the references that are passed in and the reference that is returned, what is the lifetime it needs to make sure all are valid when it returns? By marking them all with `'i`, we are telling the compiler that the return reference will be valid as long as any reference we give it is valid. Hence, `'i = [#18, #20]`. At last, we've made sure that all references' liftetimes pass the borrow checker. Hooray!
 
 ### 
