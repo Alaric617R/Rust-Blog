@@ -1281,9 +1281,9 @@ pre[class*="language-"] {
 #<span class="token number">9</span>    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"r is {}"</span><span class="token punctuation">,</span>r<span class="token punctuation">)</span><span class="token punctuation">;</span>
 #<span class="token number">10</span> <span class="token punctuation">}</span></code></pre>
 <p>To reason how borrow checker calculates <code>'a</code> of <code>max</code>, let's first draw out the lifetime of each variable in the caller's point of view: </p>
-<p><img alt="" src="file:///Users/alaric66/Desktop/research/RustViz/Rust-blogs/max_var_lifetime.jpeg"></p>
+<p><img alt="" src="file:///Users/alaric66/Desktop/research/RustViz/Rust-Blog/max_var_lifetime.jpeg"></p>
 <p>Then, the lifetime parameter can be easily computed just by looking at the function signature of <code>max</code>:</p>
-<p><img alt="" src="file:///Users/alaric66/Desktop/research/RustViz/Rust-blogs/max_lp.jpeg"></p>
+<p><img alt="" src="file:///Users/alaric66/Desktop/research/RustViz/Rust-Blog/max_lp.jpeg"></p>
 <p><code>'a</code> should be able to encompass the lifetime of all three references and be as small as possible. In this case, <code>'a = [#3, #9]</code>, the same as the lifetime of <code>r</code>. Otherwise, the borrow checker will turn down even the correct usage of some references, since the lifetime assigned to that reference ends earlier than it should. Say the borrow checker assigns <code>'a = [#3, #8]</code>, then it will turn down <code>println!("r is {}",r);</code> on line 9, since <code>r</code> should be dead on line 8. But it's obvious that the borrow checker is being over-protective, since accessing the path of <code>r</code> is totally safe, as <code>r</code> is pointing to one of <code>a</code> and <code>b</code> and both of these variables still have life on line 9.</p>
 <h2 class="atx" id="lifetime-parameter-in-structs">Lifetime Parameter in Structs</h2>
 <p>A struct must have explicit lifetime parameter annotations if it contains a reference. The reason is simple: since the reference can't outlive the lender variable, the struct also cannot. Lifetime parameters are the way to correlate the lifetime of the reference and the struct.</p>
@@ -1332,7 +1332,7 @@ pre[class*="language-"] {
 </tr>
 </tbody></table>
 <p>Note that since <code>rust_book</code> is in an inner scope, it will be destructed when the scope ends. To calculate lifetime parameter on <code>Book::new()</code> invoked on line 4, we list the lifetime of all variables engaged:</p>
-<p><img alt="" src="file:///Users/alaric66/Desktop/research/RustViz/Rust-blogs/book_life_viz.png"></p>
+<p><img alt="" src="file:///Users/alaric66/Desktop/research/RustViz/Rust-Blog/book_life_viz.png"></p>
 <p>Since <code>&amp;name</code> is a temporary variable created just to be passed on line 4, its lifetime will be limited only to line 4. As <code>'a</code> should encompass the lifetime of references both in <code>rust_book.name</code>, as well as <code>&amp;name</code>, <code>'a</code> = [#4, #6]. This calculation is passed to <code>struct Book&lt;'a&gt;</code>, so the lifetime parameter of <code>rust_book.name</code> will be [#4,#6].</p>
 <p>Note that this program runs well because every usage of a reference is within its legal lifetime scope. For example, changing <code>name</code> on line 7 won't cause a <code>value still borrowed</code> error since <code>rust_book.name</code>, which is a reference to <code>name</code>, has been out of scope since line 6 based on the lifetime we calculated.</p>
 <h5 class="atx" id="about-reference-passed-on-the-fly">About reference passed on the fly</h5>
@@ -1430,7 +1430,7 @@ pre[class*="language-"] {
 #<span class="token number">11</span> <span class="token punctuation">}</span></code></pre>
 <p>The borrow checker will complain at line 10 that <code>a</code> and <code>b</code> don't live long enough. This is obvious, since <code>a</code> and <code>b</code> are in the inner scope which ends at line 8. However, references to <code>a</code> and <code>b</code> are still inside <code>queue</code> till line 10. This will cause an invalid read to deallocated stack space, which the borrow check will prevent during compile time.</p>
 <p>Therefore, an important insight into a <code>Vecdeque</code> holding references is that <em>the lifetime of <code>VecDeque</code> is bounded by the shortest lifetime among all references it stores</em>. This can be explained by the  <a href="https://doc.rust-lang.org/book/ch10-03-lifetime-syntax.html#lifetime-elision">lifetime elision rule</a> on method definition.</p>
-<p><img alt="" src="file:///Users/alaric66/Desktop/research/RustViz/Rust-blogs/2023-06-04-12-46-13-image.png"></p>
+<p><img alt="" src="file:///Users/alaric66/Desktop/research/RustViz/Rust-blog/2023-06-04-12-46-13-image.png"></p>
 <p>Since <code>a</code> and <code>b</code> only live from lines 4/5 to line 8, the lifetime of <code>queue</code> lasts at most until line 8. So if we remove the stuff after line 9, the borrow check will let us pass.</p>
 <h3 class="atx" id="process-db-requests">Process DB Requests</h3>
 <p>We're so close to our goal! Let's design how our database handles user requests. It's typical that there will be multiple threads inside a database that serve requests concurrently, and each thread grabs some resources from a pool. We simplify each thread into a function that takes a queue of <code>Request</code>, and the number of resources it possesses, <code>max_process_unit</code>, meaning the maximum number of CRUD operations it can perform:</p>
@@ -1567,7 +1567,7 @@ pre[class*="language-"] {
 <ul>
 <li><code>'i1</code>: <code>queue: &amp;'i1 mut VecDeque&lt;&amp;'i1 mut Request&lt;'i1&gt;&gt;</code></li>
 </ul>
-<p><img alt="" src="file:///Users/alaric66/Desktop/research/RustViz/Rust-blogs/2023-06-04-17-01-18-image.png"></p>
+<p><img alt="" src="file:///Users/alaric66/Desktop/research/RustViz/Rust-blog/2023-06-04-17-01-18-image.png"></p>
 <p>From the graph, we see the references <code>request_queue</code> stores are still alive till line 20. That's because the <a href="https://stackoverflow.com/questions/50251487/what-are-non-lexical-lifetimes">NLL (Non-lexical lifetime)</a> defines a reference as alive until it will not be used anymore. In this case, <code>req</code> (Note that <code>req</code> is of type <code>&amp;mut Request</code>), which is defined by <code>if let Some(req) = request_halfway</code> can be any one of these references (i.e, <code>&amp;read_request</code>, <code>&amp;update_request</code>, <code>&amp;delete_request</code>) if the <code>if let</code> statement is true. The borrow checker will be a protective to all control flow possibilities, so the last use of any reference to R/U/D will be line 20. </p>
 <p>Therefore, <code>'i1 = [#18, #20]</code>.</p>
 <ul>
@@ -1577,7 +1577,7 @@ pre[class*="language-"] {
 <ul>
 <li><code>'i3</code>: <code>-&gt; Option&lt;&amp;'i mut Request&lt;'i3&gt;&gt;</code></li>
 </ul>
-<p><img alt="" src="file:///Users/alaric66/Desktop/research/RustViz/Rust-blogs/2023-06-04-16-49-03-image.png"></p>
+<p><img alt="" src="file:///Users/alaric66/Desktop/research/RustViz/Rust-blog/2023-06-04-16-49-03-image.png"></p>
 <p>This case is already contained within <code>'i1</code>. If the <code>if let</code> statement is true, data stored inside <code>request_halfway</code> will be moved into <code>req</code>, which results in the end of lifetime of <code>request_halfway</code>. So <code>'i3 = [#18, #19]</code></p>
 <p>Combining <code>'i1</code>, <code>'i2</code> and <code>'i3</code>, we have finally calculated <code>'i</code>, which encompasses all three sub-lifetimes to be as small as possible. Think of it this way: the compiler wants to know, of the references that are passed in and the reference that is returned, what is the lifetime it needs to make sure all are valid when it returns? By marking them all with <code>'i</code>, we are telling the compiler that the return reference will be valid as long as any reference we give it is valid. Hence, <code>'i = [#18, #20]</code>. At last, we've made sure that all references' lifetimes pass the borrow checker. Hooray!</p>
 <h3 class="atx" id=""></h3>

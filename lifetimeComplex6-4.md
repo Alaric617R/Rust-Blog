@@ -43,11 +43,11 @@ fn main(){
 
 To reason how borrow checker calculates `'a` of `max`, let's first draw out the lifetime of each variable in the caller's point of view: 
 
-![](/Users/alaric66/Desktop/research/RustViz/Rust-blogs/max_var_lifetime.jpeg)
+![](/Users/alaric66/Desktop/research/RustViz/Rust-Blog/max_var_lifetime.jpeg)
 
 Then, the lifetime parameter can be easily computed just by looking at the function signature of `max`:
 
-![](/Users/alaric66/Desktop/research/RustViz/Rust-blogs/max_lp.jpeg)
+![](/Users/alaric66/Desktop/research/RustViz/Rust-Blog/max_lp.jpeg)
 
 `'a` should be able to encompass the lifetime of all three references and be as small as possible. In this case, `'a = [#3, #9]`, the same as the lifetime of `r`. Otherwise, the borrow checker will turn down even the correct usage of some references, since the lifetime assigned to that reference ends earlier than it should. Say the borrow checker assigns `'a = [#3, #8]`, then it will turn down `println!("r is {}",r);` on line 9, since `r` should be dead on line 8. But it's obvious that the borrow checker is being over-protective, since accessing the path of `r` is totally safe, as `r` is pointing to one of `a` and `b` and both of these variables still have life on line 9.
 
@@ -97,7 +97,7 @@ First and foremost, let's calculate the lifetime of each variable (this will alw
 
 Note that since `rust_book` is in an inner scope, it will be destructed when the scope ends. To calculate lifetime parameter on `Book::new()` invoked on line 4, we list the lifetime of all variables engaged:
 
-![](/Users/alaric66/Desktop/research/RustViz/Rust-blogs/book_life_viz.png)
+![](/Users/alaric66/Desktop/research/RustViz/Rust-Blog/book_life_viz.png)
 
 Since `&name` is a temporary variable created just to be passed on line 4, its lifetime will be limited only to line 4. As `'a` should encompass the lifetime of references both in `rust_book.name`, as well as `&name`, `'a` = [#4, #6]. This calculation is passed to `struct Book<'a>`, so the lifetime parameter of `rust_book.name` will be [#4,#6].
 
@@ -226,7 +226,7 @@ The borrow checker will complain at line 10 that `a` and `b` don't live long eno
 
 Therefore, an important insight into a `Vecdeque` holding references is that *the lifetime of `VecDeque` is bounded by the shortest lifetime among all references it stores*. This can be explained by the  [lifetime elision rule](https://doc.rust-lang.org/book/ch10-03-lifetime-syntax.html#lifetime-elision) on method definition.
 
-![](/Users/alaric66/Desktop/research/RustViz/Rust-blogs/2023-06-04-12-46-13-image.png)
+![](/Users/alaric66/Desktop/research/RustViz/Rust-blog/2023-06-04-12-46-13-image.png)
 
 Since `a` and `b` only live from lines 4/5 to line 8, the lifetime of `queue` lasts at most until line 8. So if we remove the stuff after line 9, the borrow check will let us pass.
 
@@ -348,7 +348,7 @@ This function signature is a bit terrifying, with references and `'i`s all over 
 
 + `'i1`: `queue: &'i1 mut VecDeque<&'i1 mut Request<'i1>>`
 
-![](/Users/alaric66/Desktop/research/RustViz/Rust-blogs/2023-06-04-17-01-18-image.png)
+![](/Users/alaric66/Desktop/research/RustViz/Rust-blog/2023-06-04-17-01-18-image.png)
 
 From the graph, we see the references `request_queue` stores are still alive till line 20. That's because the [NLL (Non-lexical lifetime)](https://stackoverflow.com/questions/50251487/what-are-non-lexical-lifetimes) defines a reference as alive until it will not be used anymore. In this case, `req` (Note that `req` is of type `&mut Request`), which is defined by `if let Some(req) = request_halfway` can be any one of these references (i.e, `&read_request`, `&update_request`, `&delete_request`) if the `if let` statement is true. The borrow checker will be a protective to all control flow possibilities, so the last use of any reference to R/U/D will be line 20. 
 
@@ -360,7 +360,7 @@ This is easy, since `&available_resource` is passed at line 18, and since it's a
 
 + `'i3`: `-> Option<&'i mut Request<'i3>>`
 
-![](/Users/alaric66/Desktop/research/RustViz/Rust-blogs/2023-06-04-16-49-03-image.png)
+![](/Users/alaric66/Desktop/research/RustViz/Rust-blog/2023-06-04-16-49-03-image.png)
 
 This case is already contained within `'i1`. If the `if let` statement is true, data stored inside `request_halfway` will be moved into `req`, which results in the end of lifetime of `request_halfway`. So `'i3 = [#18, #19]`
 
