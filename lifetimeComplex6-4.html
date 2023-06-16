@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title></title>
+  <title>Visualization of Rust Lifetime Parameter</title>
   <style>
   @font-face {
   font-family: octicons-link;
@@ -1245,113 +1245,21 @@ pre[class*="language-"] {
 
 /*# sourceURL=webpack://./src/muya/lib/assets/styles/exportStyle.css */
 /*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8uL3NyYy9tdXlhL2xpYi9hc3NldHMvc3R5bGVzL2V4cG9ydFN0eWxlLmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLHFCQUFxQjtBQUN2Qjs7QUFFQTtFQUNFLGdCQUFnQjtFQUNoQixXQUFXO0FBQ2I7O0FBRUE7RUFDRSxrQkFBa0I7QUFDcEI7O0FBRUE7RUFDRSxrQkFBa0I7RUFDbEIsb0JBQW9CO0VBQ3BCLFNBQVM7RUFDVCxVQUFVO0VBQ1YscUJBQXFCO0FBQ3ZCOztBQUVBOztFQUVFLHlCQUF5QjtBQUMzQjs7QUFFQTtFQUNFLFdBQVc7QUFDYjs7QUFFQTtFQUNFLGdCQUFnQjtFQUNoQixnQkFBZ0I7RUFDaEIsZ0JBQWdCO0FBQ2xCOztBQUVBOzs7RUFHRSwyQkFBMkI7QUFDN0I7O0FBRUE7RUFDRSxlQUFlO0FBQ2pCOztBQUVBO0VBQ0UsY0FBYztBQUNoQjs7QUFFQTtFQUNFLGNBQWM7RUFDZCxxQkFBcUI7QUFDdkI7QUFDQTtFQUNFLGNBQWM7RUFDZCxxQkFBcUI7QUFDdkI7O0FBRUE7RUFDRSxPQUFPO0VBQ1AsY0FBYztFQUNkLGNBQWM7RUFDZCwrQkFBK0I7QUFDakMiLCJzb3VyY2VSb290IjoiIn0= */</style>
-  <style>.markdown-body{font-size:14px;line-height:1.5;}pre.front-matter{display:none!important;}/** Liber **/
-
-.hf-container,
-.markdown-body {
-  font-family: "Source Sans Pro","Segoe UI","Helvetica Neue","Open Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji";
-  font-size: 16px;
-  line-height: 1.3;
-  color: #212121;
-}
-
-:root {
-  --footerHeaderBorderColor: #1c1c1c;
-}
-.hf-container {
-  font-size: 0.75em;
-}
-.page-header:not(.simple) .hf-container {
-  padding-bottom: 2px;
-  border-bottom: 1px solid var(--footerHeaderBorderColor);
-}
-.page-footer:not(.simple) .hf-container {
-  padding-top: 2px;
-  border-top: 1px solid var(--footerHeaderBorderColor);
-}
-
-.footnotes {
-  font-size: 0.75em;
-  opacity: 0.9;
-}
-.footnotes > hr:first-of-type {
-  width: 250px;
-  height: 1px;
-  background: var(--footerHeaderBorderColor);
-}
-.footnotes > ol > li > p {
-  margin-top: 4px;
-  margin-bottom: 4px;
-}
-.footnotes .footnote-back {
-  color: #212121;
-}
-.markdown-body a.footnote-ref {
-  color: #212121;
-}
-
-.markdown-body h1,
-.markdown-body h2,
-.markdown-body h3,
-.markdown-body h4,
-.markdown-body h5,
-.markdown-body h6 {
-  font-weight: 600;
-  color: #282828;
-}
-
-.markdown-body h1 {
-  font-size: 1.8em;
-}
-.markdown-body h2 {
-  font-size: 1.6em;
-}
-.markdown-body h3 {
-  font-size: 1.4em;
-}
-.markdown-body h4,
-.markdown-body h5 {
-  font-size: 1.2em;
-}
-.markdown-body h6 {
-  font-size: 1em;
-  font-weight: 400;
-}
-
-.markdown-body h1,
-.markdown-body h2 {
-  border-bottom: none;
-  padding-bottom: 0;
-}
-
-.markdown-body hr {
-  background-color: #d7d8d9;
-  height: 1px;
-}
-
-.markdown-body .highlight pre,
-.markdown-body pre {
-  background-color: #f6f8fa;
-  border: 1px solid #e5e5e5;
-  border-radius: 0;
-}
-
-/*# sourceURL=webpack://./src/renderer/assets/themes/export/liber.theme.css */
-/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8uL3NyYy9yZW5kZXJlci9hc3NldHMvdGhlbWVzL2V4cG9ydC9saWJlci50aGVtZS5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsWUFBWTs7QUFFWjs7RUFFRSxzSEFBc0g7RUFDdEgsZUFBZTtFQUNmLGdCQUFnQjtFQUNoQixjQUFjO0FBQ2hCOztBQUVBO0VBQ0Usa0NBQWtDO0FBQ3BDO0FBQ0E7RUFDRSxpQkFBaUI7QUFDbkI7QUFDQTtFQUNFLG1CQUFtQjtFQUNuQix1REFBdUQ7QUFDekQ7QUFDQTtFQUNFLGdCQUFnQjtFQUNoQixvREFBb0Q7QUFDdEQ7O0FBRUE7RUFDRSxpQkFBaUI7RUFDakIsWUFBWTtBQUNkO0FBQ0E7RUFDRSxZQUFZO0VBQ1osV0FBVztFQUNYLDBDQUEwQztBQUM1QztBQUNBO0VBQ0UsZUFBZTtFQUNmLGtCQUFrQjtBQUNwQjtBQUNBO0VBQ0UsY0FBYztBQUNoQjtBQUNBO0VBQ0UsY0FBYztBQUNoQjs7QUFFQTs7Ozs7O0VBTUUsZ0JBQWdCO0VBQ2hCLGNBQWM7QUFDaEI7O0FBRUE7RUFDRSxnQkFBZ0I7QUFDbEI7QUFDQTtFQUNFLGdCQUFnQjtBQUNsQjtBQUNBO0VBQ0UsZ0JBQWdCO0FBQ2xCO0FBQ0E7O0VBRUUsZ0JBQWdCO0FBQ2xCO0FBQ0E7RUFDRSxjQUFjO0VBQ2QsZ0JBQWdCO0FBQ2xCOztBQUVBOztFQUVFLG1CQUFtQjtFQUNuQixpQkFBaUI7QUFDbkI7O0FBRUE7RUFDRSx5QkFBeUI7RUFDekIsV0FBVztBQUNiOztBQUVBOztFQUVFLHlCQUF5QjtFQUN6Qix5QkFBeUI7RUFDekIsZ0JBQWdCO0FBQ2xCIiwic291cmNlUm9vdCI6IiJ9 */</style>
+  <style>.markdown-body{}pre.front-matter{display:none!important;}</style>
 </head>
 <body>
   <article class="markdown-body"><h1 class="atx" id="visualization-of-rust-lifetime-parameter">Visualization of Rust Lifetime Parameter</h1>
 <h2 class="atx" id="lifetime-parameter---an-overview">Lifetime Parameter - An Overview</h2>
-<p>Lifetime parameter is a specialty in rust language. It's mainly used by the borrow checker so as to make sure usage of reference is safe, which simply obeys one rule: a reference cannot outlive the original variable it's pointing to. Lifetime parameter typically annotates the lifetime relation between:</p>
+<p>Lifetime parameters are a specialty of the Rust language. They're mainly used by the borrow checker to make sure usage of references is safe, meaning they simply follow one rule: a reference cannot outlive the original variable it's pointing to. Lifetime parameters typically annotate the lifetime relation between:</p>
 <ul>
-<li><p>References passed to a function call and possibly the return value as well.</p>
+<li><p>References passed to a function call, and possibly the return value as well.</p>
 </li>
 <li><p>References inside a struct and the struct variable upon creation.</p>
 </li>
 </ul>
-<p>The borrow checker will keep a table of lifetime for all variables, either by looking at the scope (line number) or via the aid of lifetime parameter. If a reference is accessed outside its scope (lifetime looked up by the borrow checker), then an error will be issued (<a href="https://alaric617r.github.io/Rust-Blog/Intro%20to%20Polonius.html">see how borrow checker reports reference error</a>).</p>
+<p>The borrow checker will keep a table of lifetimes for all variables, either by looking at the scope (line number) or via the aid of lifetime parameters. If a reference is accessed outside its scope (the lifetime looked up by the borrow checker), then an error will be issued (<a href="https://alaric617r.github.io/Rust-Blog/Intro%20to%20Polonius.html">see how the borrow checker reports reference errors</a>).</p>
 <h2 class="atx" id="lifetime-parameter-in-normal-functions">Lifetime Parameter in Normal Functions</h2>
-<p>Let's look a simple function that takes two reference to <code>i32</code> and return the reference to the bigger one:</p>
+<p>Let's look a simple function that takes two references to <code>i32</code> and returns the reference to the bigger one:</p>
 <pre><code class="fenced-code-block language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">max</span><span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'a</span><span class="token operator">&gt;</span><span class="token punctuation">(</span>x<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">'a</span> <span class="token keyword">i32</span><span class="token punctuation">,</span> y<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">'a</span> <span class="token keyword">i32</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">'a</span> <span class="token keyword">i32</span><span class="token punctuation">{</span>
     <span class="token keyword">if</span> x <span class="token operator">&gt;=</span> y<span class="token punctuation">{</span>
         x
@@ -1372,14 +1280,14 @@ pre[class*="language-"] {
 #<span class="token number">8</span>    <span class="token punctuation">}</span>
 #<span class="token number">9</span>    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"r is {}"</span><span class="token punctuation">,</span>r<span class="token punctuation">)</span><span class="token punctuation">;</span>
 #<span class="token number">10</span> <span class="token punctuation">}</span></code></pre>
-<p>To reason how borrow checker calculates <code>'a</code> of <code>max</code>, let's first draw out the lifetime of each variable in caller's point of view: </p>
-<p><img alt="" src="max_var_lifetime.jpeg"></p>
-<p>Then, lifetime parameter could be easily computed just looking at the function signature of <code>max</code>:</p>
-<p><img alt="" src="max_lp.jpeg"></p>
-<p><code>'a</code> should be able to encompass the lifetime of all three reference and be as small as possible, which in this case, <code>'a = [#3, #9]</code>, the same as lifetime of <code>r</code>. Otherwise, borrow checker will turn down even correct usage of some reference, since the lifetime assigned to that reference ends earlier than it should be. Say the borrow checker assign <code>'a = [#3, #8]</code>, then it will turn down <code>println!("r is {}",r);</code> on line 9, since <code>r</code> should be dead on line 8. But it's obvious that the borrow checker is being over-protective, since accessing the path of <code>r</code> is total safe, since <code>r</code> is pointing to one of <code>a</code> and <code>b</code> and both of these variables are life on line 9.</p>
+<p>To reason how borrow checker calculates <code>'a</code> of <code>max</code>, let's first draw out the lifetime of each variable in the caller's point of view: </p>
+<p><img alt="" src="file:///Users/alaric66/Desktop/research/RustViz/Rust-blogs/max_var_lifetime.jpeg"></p>
+<p>Then, the lifetime parameter can be easily computed just by looking at the function signature of <code>max</code>:</p>
+<p><img alt="" src="file:///Users/alaric66/Desktop/research/RustViz/Rust-blogs/max_lp.jpeg"></p>
+<p><code>'a</code> should be able to encompass the lifetime of all three references and be as small as possible. In this case, <code>'a = [#3, #9]</code>, the same as the lifetime of <code>r</code>. Otherwise, the borrow checker will turn down even the correct usage of some references, since the lifetime assigned to that reference ends earlier than it should. Say the borrow checker assigns <code>'a = [#3, #8]</code>, then it will turn down <code>println!("r is {}",r);</code> on line 9, since <code>r</code> should be dead on line 8. But it's obvious that the borrow checker is being over-protective, since accessing the path of <code>r</code> is totally safe, as <code>r</code> is pointing to one of <code>a</code> and <code>b</code> and both of these variables still have life on line 9.</p>
 <h2 class="atx" id="lifetime-parameter-in-structs">Lifetime Parameter in Structs</h2>
-<p>A struct must have explicit lifetime parameter as annotation if it contains a reference. The reason is simple, since the reference can't outlive the lender variable, the struct also cannot. Lifetime parameter is the way to correlate the lifetime of the reference and the struct.</p>
-<p>Let's see how lifetime parameter is computed when used to annotate a struct:</p>
+<p>A struct must have explicit lifetime parameter annotations if it contains a reference. The reason is simple: since the reference can't outlive the lender variable, the struct also cannot. Lifetime parameters are the way to correlate the lifetime of the reference and the struct.</p>
+<p>Let's see how the lifetime parameter is computed when used to annotate a struct:</p>
 <pre><code class="fenced-code-block language-rust"><span class="token keyword">struct</span> <span class="token type-definition class-name">Book</span><span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'a</span><span class="token operator">&gt;</span><span class="token punctuation">{</span>
     name<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">'a</span> <span class="token class-name">String</span><span class="token punctuation">,</span>
     serial_num<span class="token punctuation">:</span> <span class="token keyword">i32</span>
@@ -1391,7 +1299,7 @@ pre[class*="language-"] {
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
 <p>Here we define a <code>Book</code> struct that contains an immutable reference to a <code>String</code>. <code>'a</code> means that if the lifetime of <code>Book</code> is <code>'a</code>, then the lifetime of <code>name : &amp;'a String</code> will be at least <code>'a</code>.</p>
-<p>The <code>impl</code> block contains one function that create <code>Book</code> type in a factory mode. Let's see an example of calling this function:</p>
+<p>The <code>impl</code> block contains one function that create <code>Book</code> type in a factory mode. Let's look at an example of calling this function:</p>
 <pre><code class="fenced-code-block language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
 #<span class="token number">1</span>    <span class="token keyword">let</span> <span class="token keyword">mut</span> name <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">"The Rust Book"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 #<span class="token number">2</span>    <span class="token keyword">let</span> serial_num <span class="token operator">=</span> <span class="token number">1140987</span><span class="token punctuation">;</span>
@@ -1402,7 +1310,7 @@ pre[class*="language-"] {
 #<span class="token number">7</span>    name <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">"Behind Borrow Checker"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 #<span class="token number">8</span>    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"New name: {}"</span><span class="token punctuation">,</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
 #<span class="token number">9</span> <span class="token punctuation">}</span></code></pre>
-<p>First and foremost, let's calculate the lifetime of each variable (this will always be the first step, so bear in mind). It suffices just look at line numbers and scoping curly brackets:</p>
+<p>First and foremost, let's calculate the lifetime of each variable (this will always be the first step, so bear in mind). It suffices to just look at line numbers and scoping curly brackets:</p>
 <table>
 <thead>
 <tr>
@@ -1424,14 +1332,19 @@ pre[class*="language-"] {
 </tr>
 </tbody></table>
 <p>Note that since <code>rust_book</code> is in an inner scope, it will be destructed when the scope ends. To calculate lifetime parameter on <code>Book::new()</code> invoked on line 4, we list the lifetime of all variables engaged:</p>
-<p><img alt="" src="book_life_viz.png"></p>
-<p>Since <code>&amp;name</code> is a temporary variable just passed on line 4, its lifetime will just be limited in line 4. As <code>'a</code> should encompass reference lifetime both in <code>rust_book.name</code> as well as <code>&amp;name</code>,<code>'a</code> = [#4, #6]. This calculation also get passed to <code>struct Book&lt;'a&gt;</code>, so the lifetime parameter of <code>rust_book.name</code> will be [#4,#6].</p>
-<p>Note that this program runs well because every usage of reference is in its legal lifetime scope. For example, changing <code>name</code> on line 7 won't cause a <code>value still borrowed</code> error since <code>rust_book.name</code>, which is a reference to <code>name</code>, has been out of scope on line 6 based on the lifetime we calculated.</p>
+<p><img alt="" src="file:///Users/alaric66/Desktop/research/RustViz/Rust-blogs/book_life_viz.png"></p>
+<p>Since <code>&amp;name</code> is a temporary variable created just to be passed on line 4, its lifetime will be limited only to line 4. As <code>'a</code> should encompass the lifetime of references both in <code>rust_book.name</code>, as well as <code>&amp;name</code>, <code>'a</code> = [#4, #6]. This calculation is passed to <code>struct Book&lt;'a&gt;</code>, so the lifetime parameter of <code>rust_book.name</code> will be [#4,#6].</p>
+<p>Note that this program runs well because every usage of a reference is within its legal lifetime scope. For example, changing <code>name</code> on line 7 won't cause a <code>value still borrowed</code> error since <code>rust_book.name</code>, which is a reference to <code>name</code>, has been out of scope since line 6 based on the lifetime we calculated.</p>
+<h5 class="atx" id="about-reference-passed-on-the-fly">About reference passed on the fly</h5>
+<p>You may question why <code>&amp;name</code> is only live on line 4. We could imagine  the borrow checker will create a reference to <code>name</code> and pass that reference to the function, and everything is happening on a single line:</p>
+<pre><code class="fenced-code-block language-rust">#<span class="token number">4</span> <span class="token keyword">let</span> tmp <span class="token operator">=</span> <span class="token operator">&amp;</span>name<span class="token punctuation">;</span>
+#<span class="token number">4</span> <span class="token keyword">let</span> rust_book <span class="token operator">=</span> <span class="token class-name">Book</span><span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span>tmp<span class="token punctuation">,</span> serial_num<span class="token punctuation">)</span><span class="token punctuation">;</span>
+#<span class="token number">4</span> <span class="token comment">// tmp's lifetime is end here</span></code></pre>
+<p>As <a href="https://stackoverflow.com/questions/50251487/what-are-non-lexical-lifetimes">NLL lifetime</a> defines a reference's lifetime ends after its last usage, <code>tmp</code> is created on line 4 and also ended on the same line. We will treat lifetime of references created on the fly in this way in the following tutorial.</p>
 <h2 class="atx" id="lifetime-parameter---a-more-complex-example">Lifetime Parameter - A More Complex Example</h2>
-<p>Previous examples have equipped you with the basic methodology into reasoning generic lifetime parameter, just as the borrow check does. In this section, we will use lifetime parameter to construct a real-life problem-solver: a scheduler program that process requests in a database. Let's dive in.</p>
+<p>Previous examples have equipped you with the basic methodology for reasoning out generic lifetime parameters, just as the borrow check does. In this section, we will use lifetime parameters to construct a real-life problem-solver: a scheduler program that processes requests in a database. Let's dive in.</p>
 <h3 class="atx" id="modeling-requests-using-structs">Modeling Requests Using Structs</h3>
-<p>First, we need to prototype incoming request for our database. For simplicity, the DB system only supports four kinds of operation:</p>
-<p><code>Create</code>, <code>Read</code>,<code>Update</code>,<code>Delete</code>, namely <a href="https://en.wikipedia.org/wiki/Create,_read,_update_and_delete">CRUD</a>. Each kind of request will be issued in batches by different users. To model that, we can do it via defining an <code>enum</code> of all CRUD request:</p>
+<p>First, we need to prototype incoming requests for our database. For simplicity, the DB system only supports four kinds of operations: <code>Create</code>, <code>Read</code>, <code>Update</code>, and <code>Delete</code>, or <a href="https://en.wikipedia.org/wiki/Create,_read,_update_and_delete">CRUD</a>. Each kind of request will be issued in batches by different users. To model that, we can define an <code>enum</code> of all CRUD request types:</p>
 <pre><code class="fenced-code-block language-rust"><span class="token keyword">enum</span> <span class="token type-definition class-name">RequestType</span><span class="token punctuation">{</span>
     <span class="token constant">CREATE</span><span class="token punctuation">,</span>
     <span class="token constant">READ</span><span class="token punctuation">,</span>
@@ -1466,9 +1379,9 @@ pre[class*="language-"] {
         <span class="token class-name">Request</span> <span class="token punctuation">{</span> num_request_left<span class="token punctuation">:</span> _num_request<span class="token punctuation">,</span> request_type<span class="token punctuation">:</span> _request_type <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
-<p>Note that since <code>struct Request</code> contains a reference, we must make sure <code>Request</code> instance doesn't outlive the lender of <code>num_request_left</code>, meaning an explicit lifetime parameter is needed. For convenience, we also define a <code>Request::new()</code> function to create <code>Request</code> in factory mode. The rational behind the lifetime annotation has been already explained in previous section.</p>
+<p>Note that since <code>struct Request</code> contains a reference, we must make sure <code>Request</code> instance doesn't outlive the lender of <code>num_request_left</code>, meaning an explicit lifetime parameter is needed. For convenience, we also define a <code>Request::new()</code> function to create <code>Request</code> in factory mode. The rational behind the lifetime annotation has already been explained in the previous section.</p>
 <h4 class="atx" id="data-structure-for-our-request-queue-vecdeque">Data Structure for Our Request Queue: <code>VecDeque</code></h4>
-<p><code>std::collections::VecDeque</code> is just like <code>std::dequeu&lt;T&gt;</code> in C++, which can either be FIFO or FILO order. We will choose FIFO to process the incoming request. Let's first get familiar with this data structure by two examples:</p>
+<p><code>std::collections::VecDeque</code> is just like <code>std::deque&lt;T&gt;</code> in C++, which can either be FIFO or FILO order. We will choose FIFO to process the incoming requests. Let's first get familiar with this data structure with two examples:</p>
 <ul>
 <li>Correct usage:</li>
 </ul>
@@ -1489,14 +1402,14 @@ pre[class*="language-"] {
 #<span class="token number">13</span>        <span class="token punctuation">}</span>
 #<span class="token number">14</span>    <span class="token punctuation">}</span>
 #<span class="token number">15</span> <span class="token punctuation">}</span></code></pre>
-<p>Here, we create a <code>VecDeque</code> to store <code>&amp;i32</code>, because later we're going to store reference to <code>Request</code> so it's beneficial to find some insights of using reference as data beforehand. On line 5-6, we push reference of <code>a</code> and <code>b</code> to the queue. Then, we loop through the queue in FIFO order by calling <code>pop_front()</code>. Note that difference from C++, the return type of <code>pop_front()</code> if not <code>&amp;i32</code> but <code>Option&lt;&amp;i32&gt;</code>:</p>
+<p>Here, we create a <code>VecDeque</code> to store <code>&amp;i32</code>, because later we're going to store a reference to <code>Request</code>, so it's beneficial to find some insights on using references as stored data beforehand. On lines 5-6, we push references of <code>a</code> and <code>b</code> into the queue. Then, we loop through the queue in FIFO order by calling <code>pop_front()</code>. Note that unlike C++, the return type of <code>pop_front()</code> is not <code>&amp;i32</code> but <code>Option&lt;&amp;i32&gt;</code>:</p>
 <blockquote>
 <p><code>alloc::collections::vec_deque::VecDeque</code></p>
 <p><code>pub fn pop_front(&amp;mut self) -&gt; Option&lt;T&gt;</code></p>
 <hr>
 <p>Removes the first element and returns it, or&nbsp;<code>None</code>&nbsp;if the deque is empty.</p>
 </blockquote>
-<p>This provides safety each if the user calls <code>pop_front()</code> when <code>VecDeque</code> is empty. To inspect whether <code>queue</code> is empty or not, we use <code>if let</code> syntax to extract the value stored in the front of queue  and break if we see a <code>Option::None</code>.</p>
+<p>This provides a safety net if the user calls <code>pop_front()</code> when <code>VecDeque</code> is empty. To inspect whether <code>queue</code> is empty or not, we use <code>if let</code> syntax to extract the value stored in the front of queue,  and break if we see a <code>Option::None</code>.</p>
 <ul>
 <li>Erroneous Usage:</li>
 </ul>
@@ -1515,12 +1428,12 @@ pre[class*="language-"] {
     <span class="token comment">// error: `b` does not live long enough</span>
     <span class="token comment">// label: borrow later used here</span>
 #<span class="token number">11</span> <span class="token punctuation">}</span></code></pre>
-<p>The borrow checker will complain at line 10 that <code>a</code>, <code>b</code> don't live long enough. This is obvious since <code>a</code>,<code>b</code> are in a inner scope, which ends at line 8. However, references to <code>a</code> and <code>b</code> are still inside <code>queue</code> till line 10. This will cause invalid read to deallocated stack space, which the borrow check will prevent during compile time.</p>
-<p>Therefore, an important insight into <code>Vecdeque</code> holding references is that <em>the lifetime of <code>VecDeque</code> is bounded by the shortest lifetime among all references it stores</em>. This can be explained by lifetime <a href="https://doc.rust-lang.org/book/ch10-03-lifetime-syntax.html#lifetime-elision">elision rule</a> on method definition.</p>
-<p><img alt="" src="2023-06-04-12-46-13-image.png"></p>
-<p>Since <code>a</code> and <code>b</code> only live from ln4/ln5 to ln8, lifetime of <code>queue</code> is at most till ln8. So if we remove the stuff after ln9, the borrow check will let us pass.</p>
+<p>The borrow checker will complain at line 10 that <code>a</code> and <code>b</code> don't live long enough. This is obvious, since <code>a</code> and <code>b</code> are in the inner scope which ends at line 8. However, references to <code>a</code> and <code>b</code> are still inside <code>queue</code> till line 10. This will cause an invalid read to deallocated stack space, which the borrow check will prevent during compile time.</p>
+<p>Therefore, an important insight into a <code>Vecdeque</code> holding references is that <em>the lifetime of <code>VecDeque</code> is bounded by the shortest lifetime among all references it stores</em>. This can be explained by the  <a href="https://doc.rust-lang.org/book/ch10-03-lifetime-syntax.html#lifetime-elision">lifetime elision rule</a> on method definition.</p>
+<p><img alt="" src="file:///Users/alaric66/Desktop/research/RustViz/Rust-blogs/2023-06-04-12-46-13-image.png"></p>
+<p>Since <code>a</code> and <code>b</code> only live from lines 4/5 to line 8, the lifetime of <code>queue</code> lasts at most until line 8. So if we remove the stuff after line 9, the borrow check will let us pass.</p>
 <h3 class="atx" id="process-db-requests">Process DB Requests</h3>
-<p>We're so close to our goal! Let's design how our database handles user request. It's usual that there will be multiple threads inside a DB that serve requests concurrently and each thread grab some resources from a pool. We simplify each thread into a function that takes a queue of <code>Request</code> and the number of resources it possess <code>max_process_unit</code>, meaning the maximum number of CRUD operations it can perform:</p>
+<p>We're so close to our goal! Let's design how our database handles user requests. It's typical that there will be multiple threads inside a database that serve requests concurrently, and each thread grabs some resources from a pool. We simplify each thread into a function that takes a queue of <code>Request</code>, and the number of resources it possesses, <code>max_process_unit</code>, meaning the maximum number of CRUD operations it can perform:</p>
 <pre><code class="fenced-code-block language-rust"><span class="token comment">/// process requests passed from a mutable deque, return the front request if it hasn't been fully served</span>
 <span class="token comment">///</span>
 <span class="token comment">/// # Arguments</span>
@@ -1559,23 +1472,23 @@ pre[class*="language-"] {
         <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
-<p>We won't haste to explain how lifetime parameter works here, instead we will embed it with some caller. For now, just understand what it wants to accomplish:</p>
+<p>We won't hasten to explain how lifetime parameter works here; instead, we will embed it in some caller. For now, just understand what it wants to accomplish:</p>
 <ol>
-<li><p>First, loop through batched requests in FIFO order;</p>
+<li><p>First, loop through a batch of requests in FIFO order;</p>
 </li>
-<li><p>When queue not empty, serve the front request as much as we can. </p>
+<li><p>When <code>queue</code> is not empty, serve the front request as much as we can. </p>
 <ul>
 <li><p>If <code>max_process_unit</code> is enough to cover this request, just decrements <code>max_process_unit</code> by <code>request.num_request_left</code> and keeps processing;</p>
 </li>
-<li><p>If <code>max_process_unit</code> is not enough to complete the whole request, we will return the request reference and hopes some handler will process it, or just put it back to the queue, which is out of our concern.</p>
+<li><p>If <code>max_process_unit</code> is not enough to complete the whole request, we will return the request reference and hope some other handler will process it, or just put it back to the queue, which is out of our concern.</p>
 </li>
 </ul>
 </li>
-<li><p>If queue is empty, it means all requests have been served and we return blissfully. </p>
+<li><p>If <code>queue</code> is empty, it means all requests have been served and we return blissfully. </p>
 </li>
 </ol>
-<h3 class="atx" id="inside-the-db-finally">Inside the DB Finally</h3>
-<p>Eventually, we're able to put together all the pieces and design our DB. For simplicity, we model this as single-threaded:</p>
+<h3 class="atx" id="finally-inside-the-database">Finally Inside the Database</h3>
+<p>Eventually, we're able to put together all the pieces and design our DB. For simplicity, we will model this as single-threaded:</p>
 <pre><code class="fenced-code-block language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
 #<span class="token number">1</span>     <span class="token keyword">let</span> <span class="token keyword">mut</span> request_queue<span class="token punctuation">:</span> <span class="token class-name">VecDeque</span><span class="token operator">&lt;</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token class-name">Request</span><span class="token operator">&gt;</span> <span class="token operator">=</span> <span class="token class-name">VecDeque</span><span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 #<span class="token number">2</span>     <span class="token comment">// generating some requests</span>
@@ -1601,7 +1514,7 @@ pre[class*="language-"] {
 #<span class="token number">22</span>    <span class="token macro property">println!</span><span class="token punctuation">(</span><span class="token string">"there are #{} free resource left."</span><span class="token punctuation">,</span> available_resource<span class="token punctuation">)</span><span class="token punctuation">;</span>
 #<span class="token number">23</span> <span class="token punctuation">}</span></code></pre>
 <p>Let's first calculate the lifetime of each <em>variable</em>, since <code>Request</code> contains lifetime parameter itself.</p>
-<p><img alt="" src="2023-06-04-15-26-03-image.png"></p>
+<p><img alt="" src="file:///Users/alaric66/Desktop/research/RustViz/Rust-blogs/2023-06-04-15-26-03-image.png"></p>
 <p>By previous section, it's easy to verify lifetime via function signature of <code>Request::new()</code> function. Therefore, we obtain the following table of variable lifetime:</p>
 <p><em>lifetime table, can integrate into visualization, now just for reasoning</em></p>
 <table>
@@ -1648,25 +1561,25 @@ pre[class*="language-"] {
 <td align="center">[#18, #23]</td>
 </tr>
 </tbody></table>
-<p>We called <code>process_requests()</code> on ln18, lets have closer look how lifetime parameter is calculated in this case by inspecting the function signature:</p>
+<p>We called <code>process_requests()</code> on line 18 --- let's have a closer look how the lifetime parameter is calculated in this case by inspecting the function signature:</p>
 <pre><code class="fenced-code-block language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">process_requests</span><span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'i</span><span class="token operator">&gt;</span><span class="token punctuation">(</span>queue<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">'i</span> <span class="token keyword">mut</span> <span class="token class-name">VecDeque</span><span class="token operator">&lt;</span><span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">'i</span> <span class="token keyword">mut</span> <span class="token class-name">Request</span><span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'i</span><span class="token operator">&gt;&gt;</span><span class="token punctuation">,</span> max_process_unit<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">'i</span> <span class="token keyword">mut</span> <span class="token keyword">u32</span><span class="token punctuation">)</span> <span class="token punctuation">-&gt;</span> <span class="token class-name">Option</span><span class="token operator">&lt;</span><span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">'i</span> <span class="token keyword">mut</span> <span class="token class-name">Request</span><span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'i</span><span class="token operator">&gt;&gt;</span><span class="token punctuation">{</span></code></pre>
-<p>It's a bit terrifying as there are a lot of type specifying and lifetime annotations, so we'll break down by parts:</p>
+<p>This function signature is a bit terrifying, with references and <code>'i</code>s all over the place. To make it a bit easier, we'll break it down into three distinct parts, which we'll call <code>'i1</code>, <code>'i2</code>, and <code>'i3</code>. Each is a different reference within the total lifetime that makes up <code>'i</code>. </p>
 <ul>
-<li><code>queue: &amp;'i1 mut VecDeque&lt;&amp;'i1 mut Request&lt;'i1&gt;&gt;</code></li>
+<li><code>'i1</code>: <code>queue: &amp;'i1 mut VecDeque&lt;&amp;'i1 mut Request&lt;'i1&gt;&gt;</code></li>
 </ul>
-<p><img alt="" src="2023-06-04-17-01-18-image.png"></p>
-<p>From the graph, we see the reference <code>request_queue</code> stores are still alive till #20. That's because the <a href="https://stackoverflow.com/questions/50251487/what-are-non-lexical-lifetimes">NLL lifetime</a> defines a reference is alive until it will not be used anymore. In this case, <code>req</code> (Note that <code>req</code> is of type <code>&amp;mut Request</code>), which is defined by <code>if let Some(req) = request_halfway</code> can be any one of these references (i.e, <code>&amp;read_request</code>, <code>&amp;update_request</code>, <code>&amp;delete_request</code>) if the <code>if let</code> statement is true. The borrow checker will be a protective to all control flow possibilities, so that the last use of any reference to R/U/D will be line 20. </p>
-<p>Therefore,<code>'i1 = [#18, #20]</code>.</p>
+<p><img alt="" src="file:///Users/alaric66/Desktop/research/RustViz/Rust-blogs/2023-06-04-17-01-18-image.png"></p>
+<p>From the graph, we see the references <code>request_queue</code> stores are still alive till line 20. That's because the <a href="https://stackoverflow.com/questions/50251487/what-are-non-lexical-lifetimes">NLL (Non-lexical lifetime)</a> defines a reference as alive until it will not be used anymore. In this case, <code>req</code> (Note that <code>req</code> is of type <code>&amp;mut Request</code>), which is defined by <code>if let Some(req) = request_halfway</code> can be any one of these references (i.e, <code>&amp;read_request</code>, <code>&amp;update_request</code>, <code>&amp;delete_request</code>) if the <code>if let</code> statement is true. The borrow checker will be a protective to all control flow possibilities, so the last use of any reference to R/U/D will be line 20. </p>
+<p>Therefore, <code>'i1 = [#18, #20]</code>.</p>
 <ul>
-<li><code>max_process_unit: &amp;'i2 mut u32</code> </li>
+<li><code>'i2</code>: <code>max_process_unit: &amp;'i2 mut u32</code> </li>
 </ul>
-<p>This is easy, since <code>&amp;available_resource</code> is passed at line 18 and since it's a temporary reference, it ends on line 18 as well. So <code>'i2 = [#18, #18]</code>.</p>
+<p>This is easy, since <code>&amp;available_resource</code> is passed at line 18, and since it's a temporary reference, it ends on line 18 as well. So <code>'i2 = [#18, #18]</code>.</p>
 <ul>
-<li><code>-&gt; Option&lt;&amp;'i mut Request&lt;'i3&gt;&gt;</code></li>
+<li><code>'i3</code>: <code>-&gt; Option&lt;&amp;'i mut Request&lt;'i3&gt;&gt;</code></li>
 </ul>
-<p><img alt="" src="2023-06-04-16-49-03-image.png"></p>
-<p>This case is already contained in <code>'i1</code>. If the <code>if let</code> statement is true, data stored inside <code>request_halfway</code> will be moved into <code>req</code>, which results in the end of lifetime of <code>request_halfway</code>.So <code>'i3 = [#18, #19]</code></p>
-<p>Combining <code>'i1</code>,<code>'i2</code> and <code>'i3</code>, we finally calculated <code>'i</code>, which shall encompass all three sub-lifetimes and be as small as possible. Hence, <code>'i1</code> = [#18, #20]. Eventually, all references' lifetimes are made sure to pass the borrow checker, Hooray!</p>
+<p><img alt="" src="file:///Users/alaric66/Desktop/research/RustViz/Rust-blogs/2023-06-04-16-49-03-image.png"></p>
+<p>This case is already contained within <code>'i1</code>. If the <code>if let</code> statement is true, data stored inside <code>request_halfway</code> will be moved into <code>req</code>, which results in the end of lifetime of <code>request_halfway</code>. So <code>'i3 = [#18, #19]</code></p>
+<p>Combining <code>'i1</code>, <code>'i2</code> and <code>'i3</code>, we have finally calculated <code>'i</code>, which encompasses all three sub-lifetimes to be as small as possible. Think of it this way: the compiler wants to know, of the references that are passed in and the reference that is returned, what is the lifetime it needs to make sure all are valid when it returns? By marking them all with <code>'i</code>, we are telling the compiler that the return reference will be valid as long as any reference we give it is valid. Hence, <code>'i = [#18, #20]</code>. At last, we've made sure that all references' lifetimes pass the borrow checker. Hooray!</p>
 <h3 class="atx" id=""></h3>
 </article>
 </body>

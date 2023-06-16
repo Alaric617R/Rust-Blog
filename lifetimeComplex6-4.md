@@ -364,6 +364,6 @@ This is easy, since `&available_resource` is passed at line 18, and since it's a
 
 This case is already contained within `'i1`. If the `if let` statement is true, data stored inside `request_halfway` will be moved into `req`, which results in the end of lifetime of `request_halfway`. So `'i3 = [#18, #19]`
 
-Combining `'i1`, `'i2` and `'i3`, we have finally calculated `'i`, which encompasses all three sub-lifetimes to be as small as possible. Think of it this way: the compiler wants to know, of the references that are passed in and the reference that is returned, what is the lifetime it needs to make sure all are valid when it returns? By marking them all with `'i`, we are telling the compiler that the return reference will be valid as long as any reference we give it is valid. Hence, `'i = [#18, #20]`. At last, we've made sure that all references' liftetimes pass the borrow checker. Hooray!
+Combining `'i1`, `'i2` and `'i3`, we have finally calculated `'i`, which encompasses all three sub-lifetimes to be as small as possible. Think of it this way: the compiler wants to know, of the references that are passed in and the reference that is returned, what is the lifetime it needs to make sure all are valid when it returns? By marking them all with `'i`, we are telling the compiler that the return reference will be valid as long as any reference we give it is valid. Hence, `'i = [#18, #20]`. At last, we've made sure that all references' lifetimes pass the borrow checker. Hooray!
 
 ### 
